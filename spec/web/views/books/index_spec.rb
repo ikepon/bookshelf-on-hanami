@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 RSpec.describe Web::Views::Books::Index, type: :view do
   let(:exposures) { Hash[books: []] }
