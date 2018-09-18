@@ -1,9 +1,25 @@
+require 'spec_helper'
+
 RSpec.describe Web::Controllers::Books::Create, type: :action do
   let(:action) { described_class.new }
-  let(:params) { Hash[] }
+  let(:params) { Hash[book: { title: 'Confident Ruby', author: 'Avdi Grimm' }] }
+  let(:repository) { BookRepository.new }
 
-  it 'is successful' do
+  before do
+    repository.clear
+  end
+  it 'create a new book' do
+    action.call(params)
+    book = repository.last
+
+    expect(book.id).not_to be_nil
+    expect(book.title).to eq(params.dig(:book, :title))
+  end
+
+  it 'redirects the user to the bookds listing' do
     response = action.call(params)
-    expect(response[0]).to eq 200
+
+    expect(response[0]).to eq 302
+    expect(response[1]['Location']).to eq('/books')
   end
 end
